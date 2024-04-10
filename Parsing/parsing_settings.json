@@ -1,0 +1,58 @@
+{
+        "_comment": "Везде вместо spbu идентификатор вашего университета",
+        "uni_name": "klgtu",
+        "db_name": "database_klgtu", 
+        "table_name": {
+                "basic": "klgtu_basic_data",
+                "news": "klgtu_news_data",
+                "timetable": "klgtu_timetable_data"
+        },
+        
+        "block_table_match": {
+            "_comment": "Сопоставление парсера блока и таблицы, в которую сохраняются данные",
+            "edu_programms": "basic",
+            "news": "news",
+            "anons": "news",
+            "obyava": "news",
+	    "studgorodok": "basic",
+	    "praktika": "basic",
+            "news_en": "news",
+            "edu_programms_en": "basic",
+            "tg_news": "news",
+            "tg_studsov": "news",
+	    "tg_plotva": "news",
+	    "tg_career": "news"
+        },
+    
+        "block_refresh_time": {
+                "_comment": "Количество дней, через которое блок должен быть повторно спарсен/обновлен",
+                "edu_programms": 60,
+                "news": 10,
+		"anons": 10,
+		"obyava": 10,
+		"studgorodok": 60,
+		"praktika": 60,
+		"news_en": 10,
+		"edu_programms_en": 60,
+		"tg_news": 10,
+		"tg_studsov": 10,
+		"tg_plotva": 10,
+		"tg_career": 10
+        },
+    
+        "block_life_time": {
+                "_comment": "Максимальное количество месяцев хранения страницы блока в БД",
+                "edu_programms": 6,
+                "news": 6,
+		"anons": 6,
+		"obyava": 6,
+		"studgorodok": 6,
+		"praktika": 6,
+		"news_en": 6,
+		"edu_programms_en": 6,
+		"tg_news": 6,
+		"tg_studsov": 6,
+		"tg_plotva": 6,
+		"tg_career": 6
+        }
+    }
