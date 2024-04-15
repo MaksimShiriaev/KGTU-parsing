@@ -36,7 +36,7 @@ class Edu_programms_parser(BaseParser):
     #Сбор ссылок с главной страницы раздела
     def parse_urls(self):
         all_pages_urls = []
-        for page in self.pages: 
+        for page in self.pages:
             cur_url = self.url + page + '?view=table'
             src = self.read_site(cur_url)
             soup = BeautifulSoup(src, "lxml")
@@ -124,7 +124,7 @@ class Kgtu_news_parser(BaseParser):
 
         news_text = " ".join([item.text.strip() for item in soup.find_all("div", class_="editor editor--14 mb-30 mbm-15")])#.replace("\n", "")
         paragraphs = [paragraph.strip() for paragraph in news_text.split('\n') if paragraph.strip()]
-        news = ";;".join(paragraphs)
+        news = " ;;".join(paragraphs)
         html = soup.find('main')
 
         res = header + self.headers_sep + news
@@ -185,7 +185,7 @@ class Kgtu_anons_parser(BaseParser):
 
         news_text = " ".join([item.text.strip() for item in soup.find_all("div", class_="editor editor--14 mb-30 mbm-15")])#.replace("\n", "")
         paragraphs = [paragraph.strip() for paragraph in news_text.split('\n') if paragraph.strip()]
-        news = ";;".join(paragraphs)
+        news = " ;;".join(paragraphs)
 
         html = soup.find('main')
 
@@ -247,7 +247,7 @@ class Kgtu_obyava_parser(BaseParser):
 
         news_text = " ".join([item.text.strip() for item in soup.find_all("div", class_="editor editor--14 mb-30 mbm-15")])#.replace("\n", "")
         paragraphs = [paragraph.strip() for paragraph in news_text.split('\n') if paragraph.strip()]
-        news = ";;".join(paragraphs)
+        news = " ;;".join(paragraphs)
 
         html = soup.find('main')
 
@@ -380,7 +380,6 @@ class Kgtu_instituts_parser(BaseParser):
     def __init__(self, time_sleep=False):
         super().__init__()
         self.url = 'https://klgtu.ru/institutes/'
-        self.pages = ['institut_rybolovstva_i_akvakultury'] #Здесь страницы уже в виде списка
         self.time_sleep = time_sleep 
         self.topic_block = 'instituts'
 
@@ -392,7 +391,6 @@ class Kgtu_instituts_parser(BaseParser):
         one_page_urls = [item.get("href") for item in \
                 soup.find_all("a", class_="article-card")]
         all_pages_urls.extend(one_page_urls)
-        #print(all_pages_urls)
 
         if self.time_sleep is True:
             time.sleep(random.randrange(1, 3))
@@ -408,11 +406,12 @@ class Kgtu_instituts_parser(BaseParser):
 
         header = soup.find("div", class_="block-accent block-accent--36").text.replace("\n", " ")
         date = 'None'
-        news_1 = " ".join([item.text.strip() for item in soup.find_all("div", class_="wrapper wrapper--45-40 wrapper--grey-light wrapper--radius wrapper--mob-0-0")])#.replace("\n", ";;")
-        news_2 = " ".join([item.text.strip() for item in soup.find_all("div", class_="wrapper wrapper--45-40 wrapper--mob-0-0")])#.replace("\n", ";;")
-        news_3 = " ".join([item.text.strip() for item in soup.find_all("div", class_="columns__col columns__col--4")])#.replace("\n", "")
 
-        news = ";;".join([news_1, news_2, news_3]).strip()
+        news_1 = "; ".join([item.text.strip() for item in soup.find_all("div", class_="wrapper wrapper--45-40 wrapper--grey-light wrapper--radius wrapper--mob-0-0")]).replace("\n\n\n\n", ";")
+        news_2 = "; ".join([item.text.strip() for item in soup.find_all("div", class_="wrapper wrapper--45-40 wrapper--mob-0-0")]).replace("\n\n\n\n", ";")
+        news_3 = "; ".join([item.text.strip() for item in soup.find_all("div", class_="columns__col columns__col--4")])
+
+        news = " ;;".join([news_1, news_2, news_3]).strip()
 
         html = soup.find('main')
         
@@ -474,7 +473,7 @@ class Kgtu_news_en_parser(BaseParser):
 
         news_text = " ".join([item.text.strip() for item in soup.find_all("div", class_="editor editor--14 mb-30 mbm-15")])#.replace("\n", "")
         paragraphs = [paragraph.strip() for paragraph in news_text.split('\n') if paragraph.strip()]
-        news = ";;".join(paragraphs)
+        news = " ;;".join(paragraphs)
 
         html = soup.find('main')
 
@@ -541,4 +540,57 @@ class Edu_programms_en_parser(BaseParser):
         if self.time_sleep is True:
             time.sleep(random.randrange(1, 3))
         return block_title, res, public_date, str(html)
+
+
+
+
+#Парсинг блока https://klgtu.ru/en/institutes/
+class Kgtu_instituts_en_parser(BaseParser):
+    def __init__(self, time_sleep=False):
+        super().__init__()
+        self.url = 'https://klgtu.ru/en/institutes/'
+        self.time_sleep = time_sleep 
+        self.topic_block = 'instituts'
+
+    #Сбор ссылок с главной страницы раздела
+    def parse_urls(self):
+        all_pages_urls = []
+        src = self.read_site(self.url)
+        soup = BeautifulSoup(src, "lxml")
+        one_page_urls = [item.get("href") for item in \
+                soup.find_all("a", class_="article-card")]
+        all_pages_urls.extend(one_page_urls)
+
+        if self.time_sleep is True:
+            time.sleep(random.randrange(1, 3))
+
+        res = ['https://www.klgtu.ru' + url for url in all_pages_urls]
+        return res
+
+    #Парсинг текста сайтов
+    def parse_text(self, url):
+        news = ""
+        src = self.read_site(url)
+        soup = BeautifulSoup(src, "lxml")
+
+        header = soup.find("div", class_="block-accent block-accent--36").text.replace("\n", " ")
+        date = 'None'
+
+        news_1 = "; ".join([item.text.strip() for item in soup.find_all("div", class_="wrapper wrapper--45-40 wrapper--grey-light wrapper--radius wrapper--mob-0-0")]).replace("\n\n\n\n", ";")
+        news_2 = "; ".join([item.text.strip() for item in soup.find_all("div", class_="wrapper wrapper--45-40 wrapper--mob-0-0")]).replace("\n\n\n\n", ";")
+
+        news = " ;;".join([news_1, news_2]).strip()
+
+        html = soup.find('main')
+        
+        res = header + self.headers_sep + news
+        res = self.regex_cleaning(res)
+    
+        public_date = date
+
+        if self.time_sleep is True:
+            time.sleep(random.randrange(1, 3))
+        return header, res, public_date, str(html)
+
+
     

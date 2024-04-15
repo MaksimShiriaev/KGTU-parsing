@@ -9,11 +9,13 @@ import nltk
 from datetime import date
 from datetime import datetime
 from bs4 import BeautifulSoup
+from base_parser import BaseParser
 from nltk.tokenize import sent_tokenize
 
 nltk.download('punkt')
 
 class Telegram_parser_news():
+
     # URL страницы канала Telegram
     channel_url = "https://t.me/s/klgtu39"
 
@@ -45,6 +47,11 @@ class Telegram_parser_news():
         post_text = post.text.strip()
         time_text = time.text.strip()
         image_links = [img["src"] for img in post.find_all("img")]
+
+        if post.find('div', class_='tgme_widget_poll'):
+            continue
+        if post.find('div', class_='tgme_widget_message_bubble'):
+            continue
         
         # Создаем кортеж с текстом новости и ссылками на картинки
         news_info = (post_text, image_links)
@@ -53,12 +60,13 @@ class Telegram_parser_news():
         if news_info not in unique_news:
             unique_news.append(news_info)
             news_data.append(post_text)
-            post_time.append(time_text)
+            #post_time.append(time_text)
             news_urls.append(url)
+    post_time = 'None'
 
     parsing_date = str(date.today())
-    
+
     title = [sent_tokenize(news)[0] for news in news_data]
 
     # Создаем DataFrame из списка новостей
-    df = pd.DataFrame({'url': news_urls,'topic_block': 'tg_news', 'parsing_date': parsing_date, 'public_date': post_time, 'title': title, 'context': unique_news_str, 'html': str(html)})
+    df = pd.DataFrame({'url': news_urls,'topic_block': 'tg_icht', 'parsing_date': parsing_date, 'public_date': post_time, 'title': title, 'context': news_data, 'html': str(html)})
