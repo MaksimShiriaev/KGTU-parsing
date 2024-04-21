@@ -69,4 +69,4 @@ class Telegram_parser_news():
     title = [sent_tokenize(news)[0] for news in news_data]
 
     # Создаем DataFrame из списка новостей
-    df = pd.DataFrame({'url': news_urls,'topic_block': 'tg_icht', 'parsing_date': parsing_date, 'public_date': post_time, 'title': title, 'context': news_data, 'html': str(html)})
+    df = pd.DataFrame({'url': news_urls,'topic_block': 'tg_news', 'parsing_date': parsing_date, 'public_date': post_time, 'title': title, 'context': news_data, 'html': str(html)})
