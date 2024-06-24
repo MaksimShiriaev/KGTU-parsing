@@ -9,21 +9,27 @@ from sqlalchemy import create_engine, update
 def parse_data(parser):
     parsed_urls = parser.parse_urls()
     new_urls = []
+    new_parser_id = []
+    new_source =[]
     new_texts = []
     new_titles = []
     new_public_dates = []
     new_html = []
+    new_is_document = []
     for url in parsed_urls:
-        title, text, public_date, html = parser.parse_text(url)
+        title, text, public_date, html, parser_id, source, is_document = parser.parse_text(url)
         if text is not None:
             new_urls.append(url)
+            new_parser_id.append(parser_id)
+            new_source.append(source)
             new_texts.append(text)  
             new_titles.append(title)    
             new_public_dates.append(public_date)
             new_html.append(html)
+            new_is_document.append(is_document)
 
     parsing_date = str(date.today())
-    new_df = pd.DataFrame({'url': new_urls, 'topic_block': parser.topic_block, 'parsing_date': parsing_date, 'public_date': new_public_dates, 'title': new_titles, 'context': new_texts, "html": new_html})
+    new_df = pd.DataFrame({'url': new_urls, 'parser': new_parser_id, 'source': new_source, 'topic_block': parser.topic_block, 'parsing_date': parsing_date, 'public_date': new_public_dates, 'title': new_titles, 'context': new_texts, 'raw_html': new_html, 'is_document': new_is_document})
     print(f"Cпарсено {len(new_df)} документов")
     return new_df
 
