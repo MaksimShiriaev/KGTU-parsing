@@ -81,9 +81,15 @@ class Kgtu_news_parser(BaseParser):
     
         public_date = formatted_date
 
+        parser_id = 'Kgtu_news_parser'
+
+        source = 'site'
+
+        is_document = False
+
         if self.time_sleep is True:
             time.sleep(random.randrange(1, 3))
-        return header, res, public_date, str(html)
+        return header, res, public_date, str(html), parser_id, source, is_document
 
 
 
@@ -143,9 +149,15 @@ class Kgtu_anons_parser(BaseParser):
     
         public_date = formatted_date
 
+        parser_id = 'Kgtu_anons_parser'
+
+        source = 'site'
+
+        is_document = False
+
         if self.time_sleep is True:
             time.sleep(random.randrange(1, 3))
-        return header, res, public_date, str(html)
+        return header, res, public_date, str(html), parser_id, source, is_document
 
 
 
@@ -205,9 +217,15 @@ class Kgtu_obyava_parser(BaseParser):
     
         public_date = formatted_date
 
+        parser_id = 'Kgtu_obyava_parser'
+
+        source = 'site'
+
+        is_document = False
+
         if self.time_sleep is True:
             time.sleep(random.randrange(1, 3))
-        return header, res, public_date, str(html)
+        return header, res, public_date, str(html), parser_id, source, is_document
 
 
 
@@ -257,9 +275,15 @@ class Kgtu_instituts_parser(BaseParser):
     
         public_date = date
 
+        parser_id = 'Kgtu_instituts_parser'
+
+        source = 'site'
+
+        is_document = False
+
         if self.time_sleep is True:
             time.sleep(random.randrange(1, 3))
-        return header, res, public_date, str(html)
+        return header, res, public_date, str(html), parser_id, source, is_document
 
 
 
@@ -319,9 +343,15 @@ class Kgtu_news_en_parser(BaseParser):
     
         public_date = formatted_date
 
+        parser_id = 'Kgtu_news_en_parser'
+
+        source = 'site'
+
+        is_document = False
+
         if self.time_sleep is True:
             time.sleep(random.randrange(1, 3))
-        return header, res, public_date, str(html)
+        return header, res, public_date, str(html), parser_id, source, is_document
 
 
 
@@ -370,9 +400,15 @@ class Kgtu_instituts_en_parser(BaseParser):
     
         public_date = date
 
+        parser_id = 'Kgtu_instituts_en_parser'
+
+        source = 'site'
+
+        is_document = False
+
         if self.time_sleep is True:
             time.sleep(random.randrange(1, 3))
-        return header, res, public_date, str(html)
+        return header, res, public_date, str(html), parser_id, source, is_document
 
 
     
