@@ -266,7 +266,7 @@ class Kgtu_instituts_parser(BaseParser):
         news_2 = "; ".join([item.text.strip() for item in soup.find_all("div", class_="wrapper wrapper--45-40 wrapper--mob-0-0")]).replace("\n\n\n\n", ";")
         news_3 = "; ".join([item.text.strip() for item in soup.find_all("div", class_="columns__col columns__col--4")])
 
-        news = " ;; ".join([news_1, news_2, news_3]).strip().replace("Контакты", "Контакты:").replace("email", "email -").replace("адрес", "адрес -")
+        news = ". ;; ".join([news_1, news_2, news_3]).strip().replace("Контакты", "Контакты:").replace("email", "email -").replace("адрес", "адрес -")
 
         html = soup.find('main')
         
@@ -318,9 +318,9 @@ class Kgtu_rektorat_parser(BaseParser):
         date = 'None'
 
         news_1 = "; ".join([item.text.strip() for item in soup.find_all("div", class_="editor mb-50 mbm-20 upper")])
-        news_2 = "; ".join([item.text.strip() for item in soup.find_all("div", class_="columns__col columns__col--8 order-m-1 mbm-40")]).replace("\n\n\n\n\n", ";").replace(";;", ";").replace(";;", " ;;")
+        news_2 = "; ".join([item.text.strip() for item in soup.find_all("div", class_="columns__col columns__col--8 order-m-1 mbm-40")]).replace("\n\n\n\n\n", ";").replace(";;", ";").replace(";;", ". ;;")
 
-        news = " ;; ".join([news_1, news_2]).strip()
+        news = ". ;; ".join([news_1, news_2]).strip()
 
         html = soup.find('main')
         
@@ -340,6 +340,57 @@ class Kgtu_rektorat_parser(BaseParser):
         return header, res, public_date, str(html), parser_id, source, is_document
 
 
+
+
+#Парсинг блока https://klgtu.ru/divisions/uchyenyy_sovet/
+class Kgtu_uchyenyy_sovet_parser(BaseParser):
+    def __init__(self, time_sleep=False):
+        super().__init__()
+        self.url = 'https://klgtu.ru/divisions/uchyenyy_sovet/'
+        self.time_sleep = time_sleep 
+        self.topic_block = 'uchyenyy_sovet'
+
+    #Сбор ссылок с главной страницы раздела
+    def parse_urls(self):
+        all_pages_urls = []
+        src = self.read_site(self.url)
+        soup = BeautifulSoup(src, "lxml")
+
+        if self.time_sleep is True:
+            time.sleep(random.randrange(1, 3))
+
+        res = ['https://klgtu.ru/divisions/uchyenyy_sovet/']
+        return res
+
+    #Парсинг текста сайтов
+    def parse_text(self, url):
+        news = ""
+        src = self.read_site(url)
+        soup = BeautifulSoup(src, "lxml")
+
+        header = soup.find("h1", class_="title title--large mb-60 mbm-20").text.replace("\n", " ")
+        date = 'None'
+
+        news = "; ".join([item.text.strip() for item in soup.find_all("div", class_="columns__col columns__col--8 order-m-1 mbm-40")]).replace("\n\n\n\n\n", ";").replace(";;", ";").replace(";;", ". ;;")
+
+        html = soup.find('main')
+        
+        res = header + self.headers_sep + news
+        res = self.regex_cleaning(res)
+    
+        public_date = date
+
+        parser_id = 'Kgtu_uchyenyy_sovet_parser'
+
+        source = 'site'
+
+        is_document = False
+
+        if self.time_sleep is True:
+            time.sleep(random.randrange(1, 3))
+        return header, res, public_date, str(html), parser_id, source, is_document
+
+    
 
 
 #Парсинг блока https://klgtu.ru/institutes/institut_rybolovstva_i_akvakultury/
@@ -374,10 +425,10 @@ class Kgtu_kafedra_rybolovstvo_parser(BaseParser):
         header = soup.find("h1", class_="title title--large mb-60 mbm-20").text.replace("\n", " ")
         date = 'None'
 
-        news_1 = "; ".join([item.text.strip() for item in soup.find_all("div", class_="columns__col columns__col--8 order-m-1 mbm-40")]).replace("\n\n\n\n\n", " ;").replace("; ;", ";").replace(";;", " ;;")
-        news_2 = "; ".join([item.text.strip() for item in soup.find_all("div", class_="block-drop__main")]).replace("\n\n\n\n\n", " ;").replace("; ;", ";").replace(";;", " ;;").replace("; ;", ";;")
+        news_1 = "; ".join([item.text.strip() for item in soup.find_all("div", class_="columns__col columns__col--8 order-m-1 mbm-40")]).replace("\n\n\n\n\n", " ;").replace("; ;", ";").replace(";;", ". ;;")
+        news_2 = "; ".join([item.text.strip() for item in soup.find_all("div", class_="block-drop__main")]).replace("\n\n\n\n\n", " ;").replace("; ;", ";").replace(";;", ". ;;").replace("; ;", ". ;;")
 
-        news = " ;; ".join([news_1, news_2]).strip()
+        news = ". ;; ".join([news_1, news_2]).strip()
 
         html = soup.find('main')
         
@@ -431,10 +482,10 @@ class Kgtu_kafedra_agroinzheneria_parser(BaseParser):
         header = soup.find("h1", class_="title title--large mb-60 mbm-20").text.replace("\n", " ")
         date = 'None'
 
-        news_1 = "; ".join([item.text.strip() for item in soup.find_all("div", class_="columns__col columns__col--8 order-m-1 mbm-40")]).replace("\n\n\n\n\n", " ;").replace("; ;", ";").replace(";;", " ;;")
-        news_2 = "; ".join([item.text.strip() for item in soup.find_all("div", class_="block-drop__main")]).replace("\n\n\n\n\n", " ;").replace("; ;", ";").replace(";;", " ;;").replace("; ;", ";;")
+        news_1 = "; ".join([item.text.strip() for item in soup.find_all("div", class_="columns__col columns__col--8 order-m-1 mbm-40")]).replace("\n\n\n\n\n", " ;").replace("; ;", ";").replace(";;", ". ;;")
+        news_2 = "; ".join([item.text.strip() for item in soup.find_all("div", class_="block-drop__main")]).replace("\n\n\n\n\n", " ;").replace("; ;", ";").replace(";;", " ;;").replace("; ;", ". ;;")
 
-        news = " ;; ".join([news_1, news_2]).strip()
+        news = ". ;; ".join([news_1, news_2]).strip()
 
         html = soup.find('main')
         
@@ -488,10 +539,10 @@ class Kgtu_kafedra_icht_parser(BaseParser):
         header = soup.find("h1", class_="title title--large mb-60 mbm-20").text.replace("\n", " ")
         date = 'None'
 
-        news_1 = "; ".join([item.text.strip() for item in soup.find_all("div", class_="columns__col columns__col--8 order-m-1 mbm-40")]).replace("\n\n\n\n\n", " ;").replace("; ;", ";").replace(";;", " ;;")
-        news_2 = "; ".join([item.text.strip() for item in soup.find_all("div", class_="block-drop__main")]).replace("\n\n\n\n\n", " ;").replace("; ;", ";").replace(";;", " ;;").replace("; ;", ";;")
+        news_1 = "; ".join([item.text.strip() for item in soup.find_all("div", class_="columns__col columns__col--8 order-m-1 mbm-40")]).replace("\n\n\n\n\n", " ;").replace("; ;", ";").replace(";;", ". ;;")
+        news_2 = "; ".join([item.text.strip() for item in soup.find_all("div", class_="block-drop__main")]).replace("\n\n\n\n\n", " ;").replace("; ;", ";").replace(";;", " ;;").replace("; ;", ". ;;")
 
-        news = " ;; ".join([news_1, news_2]).strip()
+        news = ". ;; ".join([news_1, news_2]).strip()
 
         html = soup.find('main')
         
@@ -545,10 +596,10 @@ class Kgtu_kafedra_energetika_parser(BaseParser):
         header = soup.find("h1", class_="title title--large mb-60 mbm-20").text.replace("\n", " ")
         date = 'None'
 
-        news_1 = "; ".join([item.text.strip() for item in soup.find_all("div", class_="columns__col columns__col--8 order-m-1 mbm-40")]).replace("\n\n\n\n\n", " ;").replace("; ;", ";").replace(";;", " ;;")
-        news_2 = "; ".join([item.text.strip() for item in soup.find_all("div", class_="block-drop__main")]).replace("\n\n\n\n\n", " ;").replace("; ;", ";").replace(";;", " ;;").replace("; ;", ";;")
+        news_1 = "; ".join([item.text.strip() for item in soup.find_all("div", class_="columns__col columns__col--8 order-m-1 mbm-40")]).replace("\n\n\n\n\n", " ;").replace("; ;", ";").replace(";;", ". ;;")
+        news_2 = "; ".join([item.text.strip() for item in soup.find_all("div", class_="block-drop__main")]).replace("\n\n\n\n\n", " ;").replace("; ;", ";").replace(";;", " ;;").replace("; ;", ". ;;")
 
-        news = " ;; ".join([news_1, news_2]).strip()
+        news = ". ;; ".join([news_1, news_2]).strip()
 
         html = soup.find('main')
         
@@ -602,10 +653,10 @@ class Kgtu_kafedra_ekonomika_parser(BaseParser):
         header = soup.find("h1", class_="title title--large mb-60 mbm-20").text.replace("\n", " ")
         date = 'None'
 
-        news_1 = "; ".join([item.text.strip() for item in soup.find_all("div", class_="columns__col columns__col--8 order-m-1 mbm-40")]).replace("\n\n\n\n\n", " ;").replace("; ;", ";").replace(";;", " ;;")
-        news_2 = "; ".join([item.text.strip() for item in soup.find_all("div", class_="block-drop__main")]).replace("\n\n\n\n\n", " ;").replace("; ;", ";").replace(";;", " ;;").replace("; ;", ";;")
+        news_1 = "; ".join([item.text.strip() for item in soup.find_all("div", class_="columns__col columns__col--8 order-m-1 mbm-40")]).replace("\n\n\n\n\n", " ;").replace("; ;", ";").replace(";;", ". ;;")
+        news_2 = "; ".join([item.text.strip() for item in soup.find_all("div", class_="block-drop__main")]).replace("\n\n\n\n\n", " ;").replace("; ;", ";").replace(";;", " ;;").replace("; ;", ". ;;")
 
-        news = " ;; ".join([news_1, news_2]).strip()
+        news = ". ;; ".join([news_1, news_2]).strip()
 
         html = soup.find('main')
         
@@ -615,6 +666,165 @@ class Kgtu_kafedra_ekonomika_parser(BaseParser):
         public_date = date
 
         parser_id = 'Kgtu_kafedra_ekonomika_parser'
+
+        source = 'site'
+
+        is_document = False
+
+        if self.time_sleep is True:
+            time.sleep(random.randrange(1, 3))
+        return header, res, public_date, str(html), parser_id, source, is_document
+
+
+
+
+#Парсинг блока https://klgtu.ru/divisions/tsentr_preduniversitetskikh_proektov/
+class Kgtu_predproekt_parser(BaseParser):
+    def __init__(self, time_sleep=False):
+        super().__init__()
+        self.url = 'https://klgtu.ru/divisions/tsentr_preduniversitetskikh_proektov/'
+        self.time_sleep = time_sleep 
+        self.topic_block = 'predproekt'
+
+    #Сбор ссылок с главной страницы раздела
+    def parse_urls(self):
+        all_pages_urls = []
+        src = self.read_site(self.url)
+        soup = BeautifulSoup(src, "lxml")
+
+        if self.time_sleep is True:
+            time.sleep(random.randrange(1, 3))
+
+        res = ['https://klgtu.ru/divisions/tsentr_preduniversitetskikh_proektov/']
+        return res
+
+    #Парсинг текста сайтов
+    def parse_text(self, url):
+        news = ""
+        src = self.read_site(url)
+        soup = BeautifulSoup(src, "lxml")
+
+        header = soup.find("h1", class_="title title--large mb-60 mbm-20").text.replace("\n", " ")
+        date = 'None'
+
+        news_1 = "; ".join([item.text.strip() for item in soup.find_all("div", class_="columns__col columns__col--4 order-m-2")]).replace("\n\n\n\n\n", " ;").replace(";;", ";").replace(";;", ". ;;").replace("номер телефона", "тел:").replace("email", "email:").replace("адрес", "адрес:")
+        news_2 = "; ".join([item.text.strip() for item in soup.find_all("div", class_="columns__col columns__col--8 order-m-1 mbm-40")]).replace("\n\n\n\n\n", ";").replace(";;", ";").replace(";;", ". ;;")
+
+        news = ". ;; ".join([news_1, news_2]).strip()
+
+        html = soup.find('main')
+        
+        res = header + self.headers_sep + news
+        res = self.regex_cleaning(res)
+    
+        public_date = date
+
+        parser_id = 'Kgtu_predproekt_parser'
+
+        source = 'site'
+
+        is_document = False
+
+        if self.time_sleep is True:
+            time.sleep(random.randrange(1, 3))
+        return header, res, public_date, str(html), parser_id, source, is_document
+
+
+
+
+#Парсинг блока https://klgtu.ru/divisions/upravlenie_nauchno_issledovatelskoy_deyatelnosti/
+class Kgtu_science_explorer_parser(BaseParser):
+    def __init__(self, time_sleep=False):
+        super().__init__()
+        self.url = 'https://klgtu.ru/divisions/upravlenie_nauchno_issledovatelskoy_deyatelnosti/'
+        self.time_sleep = time_sleep 
+        self.topic_block = 'science_explorer'
+
+    #Сбор ссылок с главной страницы раздела
+    def parse_urls(self):
+        all_pages_urls = []
+        src = self.read_site(self.url)
+        soup = BeautifulSoup(src, "lxml")
+
+        if self.time_sleep is True:
+            time.sleep(random.randrange(1, 3))
+
+        res = ['https://klgtu.ru/divisions/upravlenie_nauchno_issledovatelskoy_deyatelnosti/']
+        return res
+
+    #Парсинг текста сайтов
+    def parse_text(self, url):
+        news = ""
+        src = self.read_site(url)
+        soup = BeautifulSoup(src, "lxml")
+
+        header = soup.find("h1", class_="title title--large mb-60 mbm-20").text.replace("\n", " ")
+        date = 'None'
+
+        news = "; ".join([item.text.strip() for item in soup.find_all("div", class_="columns__col columns__col--8 order-m-1 mbm-40")]).replace("\n\n\n\n\n", ";").replace(";;", ";").replace(";;", ". ;;")
+
+        html = soup.find('main')
+        
+        res = header + self.headers_sep + news
+        res = self.regex_cleaning(res)
+    
+        public_date = date
+
+        parser_id = 'Kgtu_science_explorer_parser'
+
+        source = 'site'
+
+        is_document = False
+
+        if self.time_sleep is True:
+            time.sleep(random.randrange(1, 3))
+        return header, res, public_date, str(html), parser_id, source, is_document
+
+
+
+
+#Парсинг блока https://klgtu.ru/divisions/upravlenie_nauchno_issledovatelskoy_deyatelnosti/
+class Kgtu_science_explorer_otdel_parser(BaseParser):
+    def __init__(self, time_sleep=False):
+        super().__init__()
+        self.url = 'https://klgtu.ru/divisions/upravlenie_nauchno_issledovatelskoy_deyatelnosti/'
+        self.time_sleep = time_sleep 
+        self.topic_block = 'science_explorer_otdel'
+
+    #Сбор ссылок с главной страницы раздела
+    def parse_urls(self):
+        all_pages_urls = []
+        src = self.read_site(self.url)
+        soup = BeautifulSoup(src, "lxml")
+        one_page_urls = [item.get("href") for item in \
+                soup.find_all("a", class_="article-factoid article-factoid--line")]
+        all_pages_urls.extend(one_page_urls)
+
+        if self.time_sleep is True:
+            time.sleep(random.randrange(1, 3))
+
+        res = ['https://www.klgtu.ru' + url for url in all_pages_urls]
+        return res
+
+    #Парсинг текста сайтов
+    def parse_text(self, url):
+        news = ""
+        src = self.read_site(url)
+        soup = BeautifulSoup(src, "lxml")
+
+        header = soup.find("h1", class_="title title--large mb-60 mbm-20").text.replace("\n", " ")
+        date = 'None'
+
+        news = "; ".join([item.text.strip() for item in soup.find_all("div", class_="columns__col columns__col--8 order-m-1 mbm-40")]).replace("\n\n\n\n\n", " ;").replace("; ;", ";").replace(";;", " ;;").replace("; ;", ". ;;")
+
+        html = soup.find('main')
+        
+        res = header + self.headers_sep + news
+        res = self.regex_cleaning(res)
+    
+        public_date = date
+
+        parser_id = 'Kgtu_science_explorer_otdel_parser'
 
         source = 'site'
 
@@ -730,7 +940,7 @@ class Kgtu_instituts_en_parser(BaseParser):
         news_1 = "; ".join([item.text.strip() for item in soup.find_all("div", class_="wrapper wrapper--45-40 wrapper--grey-light wrapper--radius wrapper--mob-0-0")]).replace("\n\n\n\n", ";")
         news_2 = "; ".join([item.text.strip() for item in soup.find_all("div", class_="wrapper wrapper--45-40 wrapper--mob-0-0")]).replace("\n\n\n\n", ";")
 
-        news = " ;; ".join([news_1, news_2]).strip().replace("Contacts", "Contacts:").replace("phone", "phone -").replace("email", "email -").replace("address", "address -")
+        news = ". ;; ".join([news_1, news_2]).strip().replace("Contacts", "Contacts:").replace("phone", "phone -").replace("email", "email -").replace("address", "address -")
 
         html = soup.find('main')
         
